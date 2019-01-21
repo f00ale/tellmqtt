@@ -10,3 +10,6 @@ A non-sorted list of things that can and/or should be developed further
 * MQTT server login (username/password)
 * Encryption of MQTT connection
 * Publish to pypi
+* Filtering of repeated inputs (e.g the remote control sends each command 
+  3 times, that should be filtered to only one mqtt message)
+  
