@@ -1,0 +1,7 @@
+# place this file under /etc/udev/rules.d
+# This file detects a tellstick duo and creates a symlink /dev/tellstickDuo to it.
+# It also is made group-writable by the plugdev group so you do not have to be root to use it.
+
+ACTION=="add", ATTRS{idVendor}=="1781", ATTRS{idProduct}=="0c31", RUN+="/sbin/modprobe ftdi_sio", RUN+="/bin/sh -c 'echo 1781 0c31 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'"
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1781", ATTRS{idProduct}=="0c31", MODE="660", GROUP="plugdev", SYMLINK+="tellstickDuo"

@@ -1,0 +1,3 @@
+hbmqtt
+logger
+pyserial_asyncio
