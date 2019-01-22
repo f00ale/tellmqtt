@@ -1,9 +1,7 @@
 # tellmqtt
 
-This program acts as a bridge between a USB-connected tellstick and 
+This program acts as a bridge between a USB-connected tellstick classic or duo and 
 a mqtt-server, written with python3.
-
-Currently only the Telldus Tellstick Duo is supported.
 
 The MQTT interface is rather raw, incoming data is decoded and published
 under `tellstick/in/<protocolname>/<protocoldetails>` while for sending 
@@ -14,7 +12,14 @@ data out post a message to `tellstick/out/<protocolname>/<details>`
 This program needs the tellstick to show up as an ordinary serial port.
 This is done with the linux kernel module `ftdi_sio`. However the 
 module does not recognize the tellstick out of the box, so some special 
-commands are needed (as root):
+commands are needed (as root).
+
+Tellstick classic:
+```
+# modprobe ftdi_sio
+# echo 1781 0c30 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+```
+Tellstick duo:
 ```
 # modprobe ftdi_sio
 # echo 1781 0c31 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
@@ -31,18 +36,18 @@ usb 2-2: FTDI USB Serial Device converter now attached to ttyUSB0
 The final `ttyUSB0` shows which device file under `/dev/` was created.
 
 The docs-directory contains a udev rule file (`90-tellstick.rules`) 
-which can be used to do this automatically, it also creates a symlink
+which can be used to do this automatically, it also creates a symlink `/dev/tellstick` or
 `/dev/tellstickDuo` to the device and sets permissions so the `plugdev` group
 can use it.
 
 ### Software setup
-I recommend using a python virtual environment, with at least python 3.6:
+I recommend using a python virtual environment, with at least python 3.6. The 
+virtual environment can be created with
 ```
 $ cd <tellmqtt main directory>
 $ python3 -m virtualenv venv
 $ . venv/bin/activate
 $ pip3 install $(cat requirements.txt)
-$ python3 -m tellmqtt -d /dev/tellstickDuo -h mqtt-server
 ```
 
 ### Running tellmqtt
@@ -51,7 +56,15 @@ tellmqtt can be started with:
 ```
 $ cd <tellmqtt main directory>
 $ . venv/bin/activate
-$ python3 -m tellmqtt -d /dev/tellstickDuo -h mqtt-server
+$ python3 -m tellmqtt -m duo -h mqtt-server
+```
+
+For tellstick classic replace `duo` with `classic`.
+
+By default `duo` mode tries to open `/dev/tellstickDuo` while `classic` opens 
+`/dev/tellstick`. This can be overridden with a `-d` argument, e.g.:
+```
+$ python3 -m tellmqtt -m duo -d /dev/ttyUSB3 -h mqtt-server
 ```
 
 **NB!** Please do not run tellmqtt as root!

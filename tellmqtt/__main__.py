@@ -25,18 +25,29 @@ def getopt():
                         dest="mqttport", default=1883,
                         help="MQTT broker port. Default: %(default)s")
 
+    parser.add_argument('-m', '--model',
+                        dest="model", default="duo",
+                        choices=['classic', 'duo', 'fake'],
+                        help="Tellstick model. Default: %(default)s")
     parser.add_argument('-d', '--device',
-                        dest="device", default="/dev/tellstickDuo",
-                        help="Tellstick device. Default: %(default)s")
+                        dest="device", default=None,
+                        help="Tellstick device. Default: Depends on model.")
 
     args = parser.parse_args()
     return args
 
 def serial_setup(loop, args):
-    if args.device != 'fake':
-        return serial_asyncio.open_serial_connection(loop=loop, url=args.device, baudrate=9600)
-    else:
+    if args.model == 'fake':
         return fake_serial.open_serial_connection()
+    else:
+        if args.model == 'classic':
+            dev = args.device or '/dev/tellstick'
+            rate = 4800
+        else:
+            dev = args.device or '/dev/tellstickDuo'
+            rate = 9600
+
+        return serial_asyncio.open_serial_connection(loop=loop, url=dev, baudrate=rate)
 
 def mqtt_setup(loop, args):
     client = MQTTClient()
