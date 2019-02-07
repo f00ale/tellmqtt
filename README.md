@@ -39,7 +39,7 @@ can use it.
 I recommend using a python virtual environment, with at least python 3.6:
 ```
 $ cd <tellmqtt main directory>
-$ python3 -m virtualenv venv
+$ python3 -m virtualenv -p python3 venv
 $ . venv/bin/activate
 $ pip3 install $(cat requirements.txt)
 $ python3 -m tellmqtt -d /dev/tellstickDuo -h mqtt-server
