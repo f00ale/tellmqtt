@@ -1,3 +1,4 @@
+websockets==8.1
 hbmqtt
 logger
 pyserial_asyncio
