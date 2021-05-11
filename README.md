@@ -17,7 +17,7 @@ module does not recognize the tellstick out of the box, so some special
 commands are needed (as root):
 ```
 # modprobe ftdi_sio
-# echo 1781 0c31 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+# sudo bash -c 'echo "1781 0c31" > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'
 ```
 After this the kernel log should show something like
 ```
