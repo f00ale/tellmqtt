@@ -24,6 +24,7 @@ class mandolyn:
 
         # temperature
         temp = ((data & 0x7FFF) - 6400) / 128
+        temp = round(temp, 1)
         data >>= 15
 
         # humidity
