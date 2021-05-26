@@ -51,8 +51,5 @@ class mandolyn:
         vals['temperature'] = temp
         vals['humidity'] = humidity
         vals['battery'] = battery
-        vals['house'] = house
-        vals['channel'] = channel
-        vals['parity'] = parity
       
-        return pd((id,), vals)
+        return pd((channel, house), vals)
