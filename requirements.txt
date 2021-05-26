@@ -1,5 +1,4 @@
-# hbmqtt don't support websockets version 9.x (yet)
-websockets==8.1
+websockets==8.1 # hbmqtt don't support websockets version 9.x (yet)
 hbmqtt
 logger
 pyserial_asyncio
