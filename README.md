@@ -41,7 +41,7 @@ I recommend using a python virtual environment, with at least python 3.6:
 $ cd <tellmqtt main directory>
 $ python3 -m virtualenv -p python3 venv
 $ . venv/bin/activate
-$ pip3 install $(cat requirements.txt)
+$ pip3 install -r requirements.txt
 $ python3 -m tellmqtt -d /dev/tellstickDuo -h mqtt-server
 ```
 
