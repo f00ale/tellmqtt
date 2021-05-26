@@ -4,6 +4,7 @@ from tellmqtt.common import protocoldata as pd
 
 from tellmqtt.protocols.fineoffset import fineoffset
 from tellmqtt.protocols.arctech import arctech
+from tellmqtt.protocols.mandolyn import mandolyn
 
 import json
 
@@ -12,6 +13,7 @@ logger = logging.getLogger(__name__)
 PROTOCOLS = [
     arctech(),
     fineoffset(),
+    mandolyn(),
 ]
 
 class TellstickHandler:
