@@ -75,7 +75,8 @@ The protocol-level channel is calculated as the set number * 16 + 119. So channe
 
 For the combined indoor/outdoor sensor (F007TPH) the outdoor temperature is on channel 120 + ch * 16 (no humidity for outdoor).
 
-### Arctech self-learning
+### Arctech 
+#### Arctech self-learning
 The arctech self-learning protocol reads/writes to 
 `tellstick/(in/out)/arctech/selflearning/<house>/<group>/<unit>/set`
 
@@ -89,6 +90,19 @@ where
 
 The value of the topic on input can be either `on` or `off` (case insensitive).
 On output also the value `learn` can be given to learn a new code (provided that the receiver is in learning mode)
+
+#### Arctech Codeswitch
+
+The Arctech codeswitch model reads/writes to 
+`tellstick/(in/out)/arctech/selflearning/<house>/<unit>/set`
+
+where
+
+`<house>` is a number 0 - 15 (corresponding to ones encoded by letters A-...)
+
+`<unit>` is 0 - 15
+
+The value of the topic on input can be either `on` or `off` (case insensitive).
 
 #### Telldus remote control
 Model EWT0006
