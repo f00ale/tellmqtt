@@ -12,7 +12,7 @@ from tellmqtt.common import protocoldata as pd
 logger = logging.getLogger(__name__)
 
 
-class Mandolyn:
+class mandolyn:
     """
     Mandolyn Protocol
     """
