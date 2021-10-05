@@ -140,6 +140,23 @@ to turn the switch on/off.
 Follow the telldus power-switch instructions. Note that the doorbell only listens to the `LEARN` and `ON`
 commands.
 
+### Mandolyn
+#### Termo- and hygrometer
+Models ESIC WT450H
+
+The following topics are published:
+
+`tellstick/in/mandolyn/<channel>/<house>/temperature` temperature
+
+`tellstick/in/mandolyn/<channel>/<house>/humidity` humidity
+
+`tellstick/in/mandolyn/<channel>/<house>/battery` battery (0 = ok, 1 = low)
+
+`tellstick/in/mandolyn/<channel>/<house>/json` all data in a json structure (useful if logging to database)
+
+The termo-/hygrometers have dipswitches to set the channel 1-4 and house 1-15
+
+
 ## HomeAssistant examples
 Here are examples on how to use tellmqtt with HomeAssistant and its mqtt-support.
 ### Indoor/outdoor temperature/humidity sensor
