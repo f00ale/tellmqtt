@@ -2,8 +2,8 @@ import logging
 import asyncio
 import serial_asyncio
 
-from hbmqtt.client import MQTTClient
-from hbmqtt.mqtt.constants import QOS_0, QOS_1, QOS_2
+from amqtt.client import MQTTClient
+from amqtt.mqtt.constants import QOS_0, QOS_1, QOS_2
 
 import tellmqtt
 import tellmqtt.tellstickhandler
@@ -57,13 +57,29 @@ async def readproc(serialread, mqttclient, mqtt, stick, ready):
         else:
             ready.set()
 
-async def writeproc(serialwrite, mqttclient, mqtt, stick, ready):
-    await mqttclient.subscribe([('tellstick/out/#', QOS_0)])
+_PINGED = False
 
+async def ping(mqttclient):
+    global _PINGED
+    while True:
+        if not _PINGED:
+            logger.info("Re-subscribe")
+            await mqttclient.subscribe([('tellstick/out/#', QOS_0)])
+            await mqttclient.subscribe([('tellstick/ping', QOS_0)])
+        await asyncio.sleep(30)
+        _PINGED = False
+        await mqttclient.publish("tellstick/ping", b'')
+        await asyncio.sleep(30)
+
+async def writeproc(serialwrite, mqttclient, mqtt, stick, ready):
+    global _PINGED
     while True:
         message = await mqttclient.deliver_message()
         packet = message.publish_packet
         dec = mqtt.decodepost(packet.variable_header.topic_name, packet.payload.data)
+        if dec == 'ping':
+            _PINGED = True
+            continue
         logger.debug('decoded to {!r}'.format(dec))
         out = stick.encode(*dec)
         if out:
@@ -96,8 +112,12 @@ async def main(loop, opts):
     # to be rewritten.
     ackevent = asyncio.Event()
     ackevent.set()
-    await asyncio.wait([readproc(r, client, mqtthandler, stickhandler, ackevent),
-                        writeproc(w, client, mqtthandler, stickhandler, ackevent)])
+
+    await asyncio.gather(
+        readproc(r, client, mqtthandler, stickhandler, ackevent),
+        writeproc(w, client, mqtthandler, stickhandler, ackevent),
+        ping(client),
+    )
 
     await client.disconnect()
 
@@ -107,7 +127,7 @@ def setup_logging():
         datefmt='[%Y-%m-%dT%H:%M:%S%z]',
         format='%(asctime)s %(levelname)-8s %(name)s: %(message)s',
     )
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
 
 if __name__ == '__main__':
     setup_logging()
