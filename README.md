@@ -156,6 +156,20 @@ The following topics are published:
 
 The termo-/hygrometers have dipswitches to set the channel 1-4 and house 1-15
 
+### Waveman
+#### Waveman Codeswitch
+
+The Waveman codeswitch model reads/writes to 
+`tellstick/(in/out)/waveman/codeswitch/<house>/<unit>/set`
+
+where
+
+`<house>` is a letter 'a' - 'p' (case insensitive)
+
+`<unit>` is 1 - 16
+
+The value of the topic on input can be either `on` or `off` (case insensitive).
+
 
 ## HomeAssistant examples
 Here are examples on how to use tellmqtt with HomeAssistant and its mqtt-support.
