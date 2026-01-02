@@ -5,6 +5,7 @@ from tellmqtt.common import protocoldata as pd
 from tellmqtt.protocols.fineoffset import fineoffset
 from tellmqtt.protocols.arctech import arctech
 from tellmqtt.protocols.mandolyn import mandolyn
+from tellmqtt.protocols.waveman import waveman
 
 import json
 
@@ -14,6 +15,7 @@ PROTOCOLS = [
     arctech(),
     fineoffset(),
     mandolyn(),
+    waveman(),
 ]
 
 class TellstickHandler:
@@ -41,7 +43,7 @@ class TellstickHandler:
     def decode(self, b):
         if b.startswith(b'+W'):
             d = self.itemize(b[2:])
-        elif b.startswith(b'+T'):
+        elif b.startswith((b'+T', b'+S')):
             return None # ack on command
         else:
             logger.warning('unknown input {!r}'.format(b))
